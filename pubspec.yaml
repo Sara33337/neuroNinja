@@ -38,7 +38,14 @@ dependencies:
   flutter_screenutil: ^5.9.3
   iconify_flutter: ^0.0.7
   flutter_rating_bar: ^4.0.1
-  file_picker: ^5.3.0
+  file_picker: ^6.1.1
+
+  firebase_core: ^3.11.0
+  cloud_firestore: ^5.6.3
+  firebase_storage: ^12.4.2
+  firebase_messaging: ^15.2.2
+  firebase_auth: ^5.4.2
+  google_sign_in: ^6.2.2
 
 dev_dependencies:
   flutter_test:

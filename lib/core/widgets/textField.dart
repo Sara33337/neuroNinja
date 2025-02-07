@@ -7,13 +7,16 @@ class CustomTextField extends StatelessWidget {
       required this.labelText,
       this.hintText,
       this.suffixIcon,
-      
-      required this.width
-      });
+      required this.width,
+      this.controller,
+      this.obscureText = false});  // Added obscureText with a default value of false
+  
   final String labelText;
   final String? hintText;
   final IconButton? suffixIcon;
   final double width;
+  final TextEditingController? controller;
+  final bool obscureText;  // This is the new parameter
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +25,8 @@ class CustomTextField extends StatelessWidget {
       width: width.w,
       margin: EdgeInsets.only(left: 18, right: 18, top: 10, bottom: 10),
       child: TextField(
-      
+        controller: controller,
+        obscureText: obscureText,  // Set obscureText to the passed parameter
         decoration: InputDecoration(
           contentPadding:
               EdgeInsets.only(left: 21, top: 19, bottom: 19, right: 30),
@@ -32,13 +36,11 @@ class CustomTextField extends StatelessWidget {
             fontWeight: FontWeight.w700,
             color: Colors.white.withOpacity(0.40),
           ),
-
           hintText: hintText,
           hintStyle: TextStyle(
             fontSize: 14.sp,
             color: Colors.white.withOpacity(0.40),
           ),
-          // TextField border
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16.r),
             borderSide: BorderSide(
@@ -46,7 +48,6 @@ class CustomTextField extends StatelessWidget {
               width: 1,
             ),
           ),
-          // Focused border when TextField is active
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16.r),
             borderSide: BorderSide(
@@ -54,8 +55,7 @@ class CustomTextField extends StatelessWidget {
               width: 1,
             ),
           ),
-
-          suffixIcon: suffixIcon
+          suffixIcon: suffixIcon,
         ),
       ),
     );
