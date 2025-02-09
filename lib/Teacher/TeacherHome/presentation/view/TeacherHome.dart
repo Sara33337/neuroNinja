@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:neuro_ninja/core/constans/appBar.dart';
@@ -11,6 +13,22 @@ import 'package:neuro_ninja/Child/ChildhomeFORother/presentation/childHomeForOth
 
 class HomeTeacher extends StatefulWidget {
   HomeTeacher({super.key});
+
+  
+
+  
+
+  @override
+  State<HomeTeacher> createState() => _HomeTeacherState();
+}
+
+class _HomeTeacherState extends State<HomeTeacher> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  
+  UserModel? userModel;
+  bool isLoading = true;
+  String? errorMessage;
 
   final List<UserModel> supervisedChildren = [
     UserModel(
@@ -29,11 +47,59 @@ class HomeTeacher extends StatefulWidget {
     ),
   ];
 
-  @override
-  State<HomeTeacher> createState() => _HomeTeacherState();
+    @override
+  void initState() {
+    super.initState();
+    _fetchTeacherData();
+  }
+
+  Future<void> _fetchTeacherData() async {
+  try {
+    String? userId = _auth.currentUser?.uid;
+    if (userId == null) {
+      setState(() {
+        isLoading = false;
+        errorMessage = "User not logged in.";
+      });
+      return;
+    }
+
+    DocumentSnapshot snapshot = await _firestore.collection('teachers').doc(userId).get();
+    
+    if (!snapshot.exists) {
+      setState(() {
+        isLoading = false;
+        errorMessage = "No teacher data found.";
+      });
+      return;
+    }
+
+    var data = snapshot.data() as Map<String, dynamic>? ?? {};
+    
+    setState(() {
+      userModel = UserModel(
+        userAge: data['age'] ?? 'N/A',
+        userName: data['name'] ?? 'Unknown',
+        userSchool: data['school'] ?? 'Unknown',
+        userPhoneNumber: data['phoneNumber'] ?? 'N/A',
+        userNationalID: data['nationalID'] ?? "N/A",
+        userImage: 'assets/images/personalImage.jpg',
+        userLocation: data['userLocation'] ?? "NA"
+      );
+      isLoading = false;
+    });
+
+  } catch (e) {
+    setState(() {
+      isLoading = false;
+      errorMessage = "Error fetching teacher data: $e";
+    });
+  }
 }
 
-class _HomeTeacherState extends State<HomeTeacher> {
+
+  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,6 +114,16 @@ class _HomeTeacherState extends State<HomeTeacher> {
                 child: SingleChildScrollView(
               child: Column(
                 children: [
+                  if (isLoading)
+                      const Center(child: CircularProgressIndicator())
+                    else if (errorMessage != null)
+                      Center(
+                        child: Text(
+                          errorMessage!,
+                          style: TextStyle(color: Colors.red, fontSize: 16.sp),
+                        ),
+                      )
+                    else
                   HomeScreen(
                     editOnTap: () {
                       Navigator.push(context,
@@ -55,7 +131,7 @@ class _HomeTeacherState extends State<HomeTeacher> {
                         return EditProfileTeacher();
                       }));
                     },
-                    userModel: UserModel(
+                    userModel: userModel ?? UserModel(
                       userName: "Sherif Sedik",
                       userLocation: "Damietta",
                       userSchool: "El-Iman Islamic School",
@@ -137,18 +213,18 @@ class _HomeTeacherState extends State<HomeTeacher> {
                         ListView.builder(
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
-                          itemCount: widget.supervisedChildren
+                          itemCount: supervisedChildren
                               .length, // Replace with actual item count
                           itemBuilder: (context, index) {
                             return customListTile(
-                              userModel: widget.supervisedChildren[index],
+                              userModel: supervisedChildren[index],
                               onTap: () {
                                 Navigator.push(context,
                                     MaterialPageRoute(builder: (context) {
                                   return HomeChildForOthers(
                                     onTapForSend: (){},
                                       userModel:
-                                          widget.supervisedChildren[index]);
+                                          supervisedChildren[index]);
                                 }));
                               },
                             );

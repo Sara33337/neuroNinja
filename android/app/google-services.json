@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "360144847156",
+    "project_id": "neuro-ninjaa",
+    "storage_bucket": "neuro-ninjaa.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:360144847156:android:74e1867c79ba72c71d2561",
+        "android_client_info": {
+          "package_name": "com.example.neuro_ninja"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTkZ-ULQRb2tkZLtmbAsmP31RWhXw6K4Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

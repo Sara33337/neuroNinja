@@ -36,11 +36,11 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
     // Filter screens and icons based on user role
     if (widget.userRole == 'Doctor') {
-      filteredScreens = [HomeDoctor(), ChatBot(), DoctorList()];
+      filteredScreens = [HomeDoctor(), ChatBot(), VrChildList()];
       navIcons = [
         {'icon': 'assets/icons/home.svg'},
         {'icon': 'assets/icons/chatbot.svg'},
-        {'icon': 'assets/icons/doctor.svg'},
+        {'icon': 'assets/icons/vrGlasses.svg'},
       ];
     } else if (widget.userRole == 'Teacher') {
       filteredScreens = [
